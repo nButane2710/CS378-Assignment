@@ -31,8 +31,25 @@ def main():
     cost = config_read (config)
     n = len(cost)
 
-    socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((self_ip, PORT_NO))
+    server.listen(26)
+    print(f"ON now listening, {self_ip}:{PORT_NO}, waiting for {n} VNs")
+
+    conns, addrs = [], []
+    for i in range(n):
+        conn, _ = server.accept()
+        ip, udp_port = struct.unpack("!4sH", conn.recv(6, socket.MSG_WAITALL))
+        conns.append(conn)
+        addrs.append((socket.inet_ntoa(ip), udp_port))
+        print(f"{chr(ord('A') + i)} = {addrs[i][0]}:{udp_port}")
+
     
+    for i, conn in enumerate(conns):
+        conn.sendall(link_state(i, cost, addrs))
+    print("sent link states to all the VNs")
+
+
 
 
 
