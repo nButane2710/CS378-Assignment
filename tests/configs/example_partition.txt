@@ -1,0 +1,5 @@
+# E loses both its links, so the network splits into A-B-C-D and E alone
+3	1	-1	-1
+	2	4	-1
+		-1	-1
+			-1

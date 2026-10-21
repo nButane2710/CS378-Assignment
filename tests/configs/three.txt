@@ -1,0 +1,3 @@
+# 3 nodes in a triangle
+4	9
+	2
