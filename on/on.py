@@ -53,11 +53,19 @@ def send_all(conns, cost, addrs):
     print("sent link states to all the VNs")
 
 def my_ip():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    ip = s.getsockname()[0]
-    s.close()
-    return ip
+    for target in ["8.8.8.8", "10.255.255.255", "172.31.255.255", "192.168.255.255"]:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            s.connect((target, 80))
+            ip = s.getsockname()[0]
+            if not ip.startswith("127.") and ip != "0.0.0.0":
+                return ip
+        except OSError:
+            pass
+        finally:
+            s.close()
+    print("could not find my ip, give it as the second argument")
+    sys.exit(1)
 
 def main():
     if len(sys.argv) < 2:

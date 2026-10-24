@@ -41,7 +41,7 @@ void save_lsp(uint8_t *lsp) {
     }
 }
 
-void send_lsp() {
+void send_lsp(void) {
     uint8_t lsp[136];
     seq_no++;
     uint32_t s = htonl(seq_no);
@@ -58,7 +58,7 @@ void send_lsp() {
     flood(lsp, 6 + n_count * 5);
 }
 
-void recv_lsp() {
+void recv_lsp(void) {
     uint8_t lsp[136];
     int len = recvfrom(udp_fd, lsp, sizeof(lsp), 0, NULL, NULL);
     uint32_t s;
@@ -73,7 +73,7 @@ void recv_lsp() {
     flood(lsp, len);
 }
 
-void recv_link_state() {
+void recv_link_state(void) {
     uint8_t count;
     uint8_t buf[26 * 11];
     if (recv(tcp_fd, &count, 1, 0) <= 0) {
@@ -110,7 +110,7 @@ void recv_link_state() {
     send_lsp();
 }
 
-void forget_old() {
+void forget_old(void) {
     for (int i = 0; i < 26; i++) {
         if (i != label - 'A' && seen[i] && time(NULL) - heard[i] > 3 * PERIOD) {
             seen[i] = 0;
@@ -119,7 +119,7 @@ void forget_old() {
     }
 }
 
-void print_graph() {
+void print_graph(void) {
     int n = 0;
     for (int i = 0; i < 26; i++)
         if (seen[i])

@@ -2,7 +2,7 @@
 
 cd "$(dirname "$0")/.."
 IP=$(ipconfig getifaddr en0 2>/dev/null || hostname -I | awk '{print $1}')
-gcc vn/vn.c -o vn/vn || exit 1
+make -s || exit 1
 mkdir -p logs
 PASS=0
 FAIL=0
